@@ -66,8 +66,6 @@ class UserController extends Controller
 
         $avatarName = $user->id.'_avatar'.time().'.'.request()->avatar->getClientOriginalExtension();
 
-        $avatarName;
-
         $request->avatar->storeAs('avatars',$avatarName);
 
         $user->avatar = $avatarName;

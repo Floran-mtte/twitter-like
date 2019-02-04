@@ -40,4 +40,9 @@
         border-radius: 100px;
     }
 
+    textarea {
+        border: solid 1px black;
+        border-radius: 100px;
+    }
+
 </style>

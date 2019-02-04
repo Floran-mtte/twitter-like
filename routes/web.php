@@ -17,3 +17,4 @@ Auth::routes();
 
 Route::get('/account','UserController@profile')->name('account');
 Route::post('/profile','UserController@editProfile')->name('updateProfile');
+Route::get('/test','PostController@index');
