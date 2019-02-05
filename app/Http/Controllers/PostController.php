@@ -14,7 +14,8 @@ class PostController extends Controller
     {
         $user = Auth::user();
         $posts = User::find($user->id)->posts;
-        var_dump($posts);
+
+        return json_encode(['status' => 'success', 'data' => $posts]);
     }
 
     public function sendTweet(Request $request)

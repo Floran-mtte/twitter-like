@@ -18,4 +18,4 @@ Auth::routes();
 Route::get('/account','UserController@profile')->name('account');
 Route::post('/profile','UserController@editProfile')->name('updateProfile');
 Route::post('/sendTweet','PostController@sendTweet')->name('sendTweet');
-Route::get('/test','PostController@index');
+Route::get('/timeline','PostController@index');

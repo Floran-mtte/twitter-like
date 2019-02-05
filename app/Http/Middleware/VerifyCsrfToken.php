@@ -22,5 +22,6 @@ class VerifyCsrfToken extends Middleware
         '/profile',
         '/test',
         '/sendTweet',
+        '/timeline',
     ];
 }
