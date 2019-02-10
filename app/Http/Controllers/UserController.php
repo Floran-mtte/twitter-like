@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Http\Controllers\PostController;
+Carbon::setLocale('fr');
 
 class UserController extends Controller
 {
+
     public function profile()
     {
         if(Auth::check()) {
@@ -52,6 +56,47 @@ class UserController extends Controller
         }
 
 
+
+    }
+
+    public function displayProfile(Request $request)
+    {
+
+        $username = $request->username;
+        $user_profile = User::where('username', '=' ,$username)->firstOrFail();
+
+        $following = User::find($user_profile->id)->follows;
+        $following_count = count($following);
+
+        $followed = User::find($user_profile->id)->followed;
+        $followed_count = count($followed);
+
+        $posts = User::find($user_profile->id)->posts;
+        $count = count($posts);
+
+        $convert_date = ['1' => 'Janvier', '2' => 'Février', '3' => 'Mars', '4' => 'Avril', '5' => 'Mai', '6' => 'Juin', '7' => 'Juillet', '8' => 'Aout',
+                         '9' => 'Septembre',
+                         '10' => 'Octobre',
+                         '11' => 'Novembre',
+                         '12' => 'Décembre'
+                        ];
+
+        $signup_date =  Carbon::createFromFormat('Y-m-d H:i:s',$user_profile->created_at);
+        $signup_date = $convert_date[$signup_date->month].' '.$signup_date->year;
+
+
+        $data = [
+                'id' => $user_profile->id,
+                'name' => $user_profile->name,
+                'username' => $user_profile->username,
+                'avatar' => $user_profile->avatar,
+                'signup_date' => $signup_date,
+                'count' => $count,
+                'followingCount' => $following_count,
+                'followedCount' => $followed_count,
+                ];
+
+        return view('userProfile',$data);
 
     }
 

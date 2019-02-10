@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Post;
+use App\Follow;
 
 class User extends Authenticatable
 {
@@ -31,6 +32,16 @@ class User extends Authenticatable
 
     public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class)->orderBy('tweet_date','desc');
+    }
+
+    public function follows()
+    {
+        return $this->hasMany(Follow::class,'user_following');
+    }
+
+    public function followed()
+    {
+        return $this->hasMany(Follow::class,'user_followed');
     }
 }
