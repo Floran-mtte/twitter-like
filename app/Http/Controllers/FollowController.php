@@ -12,6 +12,7 @@ class FollowController extends Controller
     public function getFollowing(Request $request)
     {
         $id = $request->id;
+        //var_dump($id);
         $user = User::findOrFail($id);
 
         $following = User::find($user->id)->follows;
@@ -40,7 +41,7 @@ class FollowController extends Controller
 
         foreach ($following as $follow)
         {
-            $user_id = $follow->user_followed;
+            $user_id = $follow->user_following;
 
             $user = User::find($user_id);
             array_push($data['users'], $user);

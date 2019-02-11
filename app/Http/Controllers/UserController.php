@@ -69,6 +69,16 @@ class UserController extends Controller
         $following_count = count($following);
 
         $followed = User::find($user_profile->id)->followed;
+        $id_connected_user = Auth::id();
+        $isFollow = false;
+
+        foreach ($followed as $f)
+        {
+            if($id_connected_user == $f->user_following)
+            {
+                $isFollow = true;
+            }
+        }
         $followed_count = count($followed);
 
         $posts = User::find($user_profile->id)->posts;
@@ -84,7 +94,6 @@ class UserController extends Controller
         $signup_date =  Carbon::createFromFormat('Y-m-d H:i:s',$user_profile->created_at);
         $signup_date = $convert_date[$signup_date->month].' '.$signup_date->year;
 
-
         $data = [
                 'id' => $user_profile->id,
                 'name' => $user_profile->name,
@@ -94,6 +103,8 @@ class UserController extends Controller
                 'count' => $count,
                 'followingCount' => $following_count,
                 'followedCount' => $followed_count,
+                'connectUser' => $id_connected_user,
+                'followed' => $isFollow
                 ];
 
         return view('userProfile',$data);

@@ -12,6 +12,15 @@
                 <li class="nav-item" id="following">Abonnements<div class="value-menu">{{ $followingCount }}</div></li>
                 <li class="nav-item" id="followed">Abonnés<div class="value-menu">{{ $followedCount }}</div></li>
             </ul>
+            @if($id == $connectUser)
+                <a class="editProfile" href="/account">Editez votre profil</a>
+            @else
+                @if($followed)
+                    <button class="follow-btn">Abonné</button>
+                @else
+                    <button class="follow-btn">Suivre</button>
+                @endif
+            @endif
         </div>
     </div>
 
@@ -126,6 +135,57 @@
         height: 200px;
         border: 5px solid #fff;
         border-radius: 50%;
+    }
+
+    .editProfile {
+        float: right;
+        margin-top: 10px;
+        color: rgb(255, 255, 255);
+        border-width: 1px;
+        border-style: solid;
+        border-color: grey;
+        border-image: initial;
+        border-radius: 100px;
+        box-shadow: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 20px;
+        padding: 6px 16px;
+        position: relative;
+        text-align: center;
+        white-space: nowrap;
+        background: #b8bec6;
+    }
+
+    .editProfile:focus {
+        outline: none;
+    }
+
+    .editProfile:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+    .follow-btn {
+        float: right;
+        margin-top: 10px;
+        color: #0084B4;
+        background-color: #fff;
+        border: 1px solid #1da1f2;
+        font-size: 14px;
+        line-height: 20px;
+        padding: 6px 30px;
+        white-space: nowrap;
+        text-align: center;
+        border-radius: 100px;
+        box-shadow: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .follow-btn:hover {
+        background: #E5F2F7;
     }
 
     .infos {
