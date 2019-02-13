@@ -28,6 +28,58 @@ $(function() {
         loadFollowers();
     });
 
+    $('.follow-btn').on('click',function (e) {
+        let id_user = $('#id_user').val();
+
+        if($(this).data('type') === "unfollow")
+        {
+            unfollow(id_user);
+            let counterFollower = $('#followed > .value-menu');
+            let countFollowers = parseInt(counterFollower.text());
+            countFollowers--;
+            counterFollower.html('');
+            counterFollower.append(countFollowers);
+
+            /*let counterFollowing = $('#following > .value-menu');
+            let countFollowing = parseInt(counterFollowing.text());
+            if(counterFollowing > 0)
+            {
+                countFollowing--;
+                counterFollowing.html('');
+                counterFollowing.append(countFollowing.toString());
+            }*/
+
+        }
+        else if($(this).data('type') === "follow")
+        {
+            follow(id_user);
+            let counterFollower = $('#followed > .value-menu');
+            let countFollowers = parseInt(counterFollower.text());
+            countFollowers++;
+            counterFollower.html('');
+            counterFollower.append(countFollowers);
+        }
+    });
+
+    $('.follow-btn').hover(function(){
+
+        if($(this).data('type') === "unfollow")
+        {
+            $(this).text("Se désabonner");
+        }
+    }, function(){
+        if($(this).data('type') === "unfollow")
+        {
+            $(this).text("Abonné");
+        }
+        else
+        {
+            $(this).text("Suivre");
+        }
+    });
+
+
+
 });
 
 function laodTweet()
@@ -168,6 +220,53 @@ function loadFollowers()
 
 
 
+
+            }
+        })
+        .fail(function (data, status, error) {
+
+        });
+}
+
+function unfollow(id_following)
+{
+    $.ajax({
+        url:'/unfollow',
+        method:'delete',
+        data:'id_following='+id_following,
+        dataType:'json'
+    })
+        .done(function (data, status) {
+            console.log(data);
+
+            if(data.status === "success")
+            {
+                let followBtn = $('.follow-btn');
+                followBtn.data('type','follow');
+                followBtn.text('Suivre');
+            }
+        })
+        .fail(function (data, status, error) {
+
+        });
+}
+
+function follow(id_following)
+{
+    $.ajax({
+        url:'/follow',
+        method:'post',
+        data:'id_following='+id_following,
+        dataType:'json'
+    })
+        .done(function (data, status) {
+            console.log(data);
+
+            if(data.status === "success")
+            {
+                let followBtn = $('.follow-btn');
+                followBtn.data('type','unfollow');
+                followBtn.text('Abonné');
 
             }
         })

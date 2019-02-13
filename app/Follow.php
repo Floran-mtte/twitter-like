@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Follow extends Model
 {
     protected $table = 'follows';
+    public $timestamps = false;
 
     protected $fillable = [
         'user_following', 'user_followed',

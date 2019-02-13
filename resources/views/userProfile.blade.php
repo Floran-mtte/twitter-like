@@ -16,9 +16,9 @@
                 <a class="editProfile" href="/account">Editez votre profil</a>
             @else
                 @if($followed)
-                    <button class="follow-btn">Abonné</button>
+                    <button class="follow-btn" data-type="unfollow">Abonné</button>
                 @else
-                    <button class="follow-btn">Suivre</button>
+                    <button class="follow-btn" data-type="follow">Suivre</button>
                 @endif
             @endif
         </div>
@@ -182,10 +182,15 @@
         box-shadow: none;
         cursor: pointer;
         font-weight: bold;
+        outline-style: none;
     }
 
     .follow-btn:hover {
         background: #E5F2F7;
+    }
+
+    .follow-btn:focus {
+        outline: none;
     }
 
     .infos {

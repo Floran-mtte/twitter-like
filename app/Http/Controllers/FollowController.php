@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Follow;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Post;
@@ -50,6 +51,33 @@ class FollowController extends Controller
         $response = ['status' => 'success','data' => $data];
         return json_encode($response);
 
+    }
+
+    public function unfollow(Request $request)
+    {
+        $id_user = Auth::id();
+        $id_following = $request->id_following;
+
+        $follow = Follow::where('user_following',$id_user)->where('user_followed',$id_following);
+
+        $follow->delete();
+
+        return ['status' => 'success'];
+    }
+
+    public function follow(Request $request)
+    {
+        $id_user = Auth::id();
+        $id_following = $request->id_following;
+
+        $follow = new Follow();
+
+        $follow->user_following = $id_user;
+        $follow->user_followed = $id_following;
+
+        $follow->save();
+
+        return ['status' => 'success'];
     }
 
 }

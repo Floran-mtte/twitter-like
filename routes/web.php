@@ -23,3 +23,5 @@ Route::get('/timeline','PostController@index');
 Route::get('/personal','PostController@getPersonalTweet');
 Route::get('/loadFollowing','FollowController@getFollowing');
 Route::get('/loadFollowers','FollowController@getFollowers');
+Route::delete('/unfollow','FollowController@unfollow');
+Route::post('/follow','FollowController@follow');
