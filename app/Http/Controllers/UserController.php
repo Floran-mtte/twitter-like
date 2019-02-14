@@ -25,76 +25,78 @@ class UserController extends Controller
 
     public function editProfile(Request $request)
     {
-        $result = true;
-
-        if($request->avatar != "")
+        if(Auth::check())
         {
-            $result = $this->uploadAvatar($request);
-        }
+            $result = true;
 
-        if($result)
-        {
-            $user = Auth::user();
-
-            $user->name = $request->name;
-            $user->username = $request->username;
-            $user->email = $request->email;
-
-            if($request->password != "")
+            if($request->avatar != "")
             {
-                $user->password = bcrypt($request->password);
+                $result = $this->uploadAvatar($request);
             }
 
-            $user->save();
+            if($result)
+            {
+                $user = Auth::user();
 
-            return back()->with('success','Modifications effectuées avec succès.');
+                $user->name = $request->name;
+                $user->username = $request->username;
+                $user->email = $request->email;
 
+                if($request->password != "")
+                {
+                    $user->password = bcrypt($request->password);
+                }
+
+                $user->save();
+
+                return back()->with('success','Modifications effectuées avec succès.');
+
+            }
+            else
+            {
+                return back()->with('failed','Problème lors de l\`upload de votre photo de profil veuillez réessayer.');
+            }
         }
-        else
-        {
-            return back()->with('failed','Problème lors de l\`upload de votre photo de profil veuillez réessayer.');
-        }
-
-
 
     }
 
     public function displayProfile(Request $request)
     {
-
-        $username = $request->username;
-        $user_profile = User::where('username', '=' ,$username)->firstOrFail();
-
-        $following = User::find($user_profile->id)->follows;
-        $following_count = count($following);
-
-        $followed = User::find($user_profile->id)->followed;
-        $id_connected_user = Auth::id();
-        $isFollow = false;
-
-        foreach ($followed as $f)
+        if(Auth::check())
         {
-            if($id_connected_user == $f->user_following)
+            $username = $request->username;
+            $user_profile = User::where('username', '=' ,$username)->firstOrFail();
+
+            $following = User::find($user_profile->id)->follows;
+            $following_count = count($following);
+
+            $followed = User::find($user_profile->id)->followed;
+            $id_connected_user = Auth::id();
+            $isFollow = false;
+
+            foreach ($followed as $f)
             {
-                $isFollow = true;
+                if($id_connected_user == $f->user_following)
+                {
+                    $isFollow = true;
+                }
             }
-        }
-        $followed_count = count($followed);
+            $followed_count = count($followed);
 
-        $posts = User::find($user_profile->id)->posts;
-        $count = count($posts);
+            $posts = User::find($user_profile->id)->posts;
+            $count = count($posts);
 
-        $convert_date = ['1' => 'Janvier', '2' => 'Février', '3' => 'Mars', '4' => 'Avril', '5' => 'Mai', '6' => 'Juin', '7' => 'Juillet', '8' => 'Aout',
-                         '9' => 'Septembre',
-                         '10' => 'Octobre',
-                         '11' => 'Novembre',
-                         '12' => 'Décembre'
-                        ];
+            $convert_date = ['1' => 'Janvier', '2' => 'Février', '3' => 'Mars', '4' => 'Avril', '5' => 'Mai', '6' => 'Juin', '7' => 'Juillet', '8' => 'Aout',
+                '9' => 'Septembre',
+                '10' => 'Octobre',
+                '11' => 'Novembre',
+                '12' => 'Décembre'
+            ];
 
-        $signup_date =  Carbon::createFromFormat('Y-m-d H:i:s',$user_profile->created_at);
-        $signup_date = $convert_date[$signup_date->month].' '.$signup_date->year;
+            $signup_date =  Carbon::createFromFormat('Y-m-d H:i:s',$user_profile->created_at);
+            $signup_date = $convert_date[$signup_date->month].' '.$signup_date->year;
 
-        $data = [
+            $data = [
                 'id' => $user_profile->id,
                 'name' => $user_profile->name,
                 'username' => $user_profile->username,
@@ -105,9 +107,10 @@ class UserController extends Controller
                 'followedCount' => $followed_count,
                 'connectUser' => $id_connected_user,
                 'followed' => $isFollow
-                ];
+            ];
 
-        return view('userProfile',$data);
+            return view('userProfile',$data);
+        }
 
     }
 
@@ -117,17 +120,21 @@ class UserController extends Controller
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);*/
 
-        $user = Auth::user();
+        if(Auth::check())
+        {
+            $user = Auth::user();
 
 
-        $avatarName = $user->id.'_avatar'.time().'.'.request()->avatar->getClientOriginalExtension();
+            $avatarName = $user->id.'_avatar'.time().'.'.request()->avatar->getClientOriginalExtension();
 
-        $request->avatar->storeAs('avatars',$avatarName);
+            $request->avatar->storeAs('avatars',$avatarName);
 
-        $user->avatar = $avatarName;
+            $user->avatar = $avatarName;
 
-        $user->save();
+            $user->save();
 
-        return true;
+            return true;
+        }
+
     }
 }
